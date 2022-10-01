@@ -6,9 +6,9 @@ require("dotenv").config({ path: ".env" });
 module.exports = {
   solidity: "0.8.1",
   networks: {
-    rinkeby: {
-      url: process.env.INFURA_API_KEY_URL,
-      accounts: [process.env.RINKEBY_PRIVATE_KEY],
-    },
+    goerli: {
+      url: process.env.INFURA_API_GOERLI,
+      accounts: [process.env.METAMASK_KEY_GOERLI]
+    }
   },
 };
