@@ -3,6 +3,7 @@
 pragma solidity ^0.8.1;
 
 
+// import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "hardhat/console.sol";
@@ -10,6 +11,8 @@ import "hardhat/console.sol";
 import { Base64 } from "./libraries/Base64.sol";
 
 contract MyEpicNFT is ERC721URIStorage {
+
+    uint256 public constant maxSupply = 25;
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
     // comment example no meaning
@@ -23,10 +26,9 @@ contract MyEpicNFT is ERC721URIStorage {
 
     event newEpicNFTMinted(address sender, uint tokenId);
 
-    constructor() ERC721 ("RyanNFT", "ROT") {
-        console.log("this is my fist nft");
+    constructor() ERC721 ("GentleAgainNFT", "GEN") {
+        _tokenIds.increment();
     }
-
 
     function pickRandomFirstWord(uint256 _tokenId) public view returns (string memory) {
         uint256 rand = random(string(abi.encodePacked("First Word", Strings.toString(_tokenId))));
@@ -56,9 +58,13 @@ contract MyEpicNFT is ERC721URIStorage {
         return uint256(keccak256(abi.encodePacked(input)));
     }
 
-    function makeAnEpicNFT() public {
-        uint256 newItemId = _tokenIds.current();
+    function totalSupply() public view returns (uint) {
+        return _tokenIds.current();
+    }
 
+    function makeAnEpicNFT() public {
+        require(totalSupply() <= maxSupply, "MAX Number of NFTs minted Sorry =(");
+        uint256 newItemId = _tokenIds.current();
         string memory first = pickRandomFirstWord(newItemId);
         string memory second = pickRandomSecondWord(newItemId);
         string memory third = pickRandomThirdWord(newItemId);
